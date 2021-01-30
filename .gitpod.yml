@@ -1,3 +1,4 @@
 tasks:
 - init: echo 'init script' # runs during prebuild
   command: javac *.java
+  command: mkdir fax
