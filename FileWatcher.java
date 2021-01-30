@@ -1,191 +1,163 @@
 import static java.nio.file.StandardWatchEventKinds.*;
-2
 import java.io.File;
-3
 import java.io.IOException;
-4
 import java.nio.file.ClosedWatchServiceException;
-5
 import java.nio.file.FileSystems;
-6
 import java.nio.file.Path;
-7
 import java.nio.file.Paths;
-8
 import java.nio.file.WatchEvent;
-9
 import java.nio.file.WatchKey;
-10
 import java.nio.file.WatchService;
-11
 import java.util.ArrayList;
-12
 import java.util.Collections;
-13
 import java.util.List;
-14
-15
+
 public class FileWatcher implements Runnable {
-16
-17
   protected List<FileListener> listeners = new ArrayList<>();
-18
   protected final File folder;
-19
   protected static final List<WatchService> watchServices = new ArrayList<>();
-20
-  
-21
   public FileWatcher(File folder) {
-22
     this.folder = folder;
-23
   }
-24
-25
   public void watch() {
-26
+
     if (folder.exists()) {
-27
       Thread thread = new Thread(this);
-28
-      thread.setDaemon(true);
-29
+      thread.setDaemon(true)
       thread.start();
-30
+
     }
-31
+
   }
-32
-33
+
+
   @Override
-34
+
   public void run() {
-35
+
     try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
-36
+
       Path path = Paths.get(folder.getAbsolutePath());
-37
+
       path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
-38
+
       watchServices.add(watchService);
-39
+
       boolean poll = true;
-40
+
       while (poll) {
-41
+
         poll = pollEvents(watchService);
-42
+
       }
-43
+
     } catch (IOException | InterruptedException | ClosedWatchServiceException e) {
-44
+
        Thread.currentThread().interrupt();
-45
+
     }
-46
+
   }
-47
-48
+
   protected boolean pollEvents(WatchService watchService) throws InterruptedException {
-49
+
     WatchKey key = watchService.take();
-50
+
     Path path = (Path) key.watchable();
-51
+
     for (WatchEvent<?> event : key.pollEvents()) {
-52
+
       notifyListeners(event.kind(), path.resolve((Path) event.context()).toFile());
-53
+
     }
-54
+
     return key.reset();
-55
+
   }
-56
-57
+
+
   protected void notifyListeners(WatchEvent.Kind<?> kind, File file) {
-58
+
     FileEvent event = new FileEvent(file);
-59
+
     if (kind == ENTRY_CREATE) {
-60
+
       for (FileListener listener : listeners) {
-61
+
         listener.onCreated(event);
-62
+
       }
-63
+
       if (file.isDirectory()) {
-64
+
         new FileWatcher(file).setListeners(listeners).watch();
-65
+
       }
-66
+
    } 
-67
+
    else if (kind == ENTRY_MODIFY) {
-68
+
      for (FileListener listener : listeners) {
-69
+
        listener.onModified(event);
-70
+
      }
-71
+
    }
-72
+
    else if (kind == ENTRY_DELETE) {
-73
+
      for (FileListener listener : listeners) {
-74
+
        listener.onDeleted(event);
-75
+
      }
-76
+
    }
-77
+
   }
-78
-79
+
+
   public FileWatcher addListener(FileListener listener) {
-80
+
     listeners.add(listener);
-81
+
     return this;
-82
+
   }
-83
-84
+
+
   public FileWatcher removeListener(FileListener listener) {
-85
+
     listeners.remove(listener);
-86
+
     return this;
-87
+
   }
-88
-89
+
+
   public List<FileListener> getListeners() {
-90
-    return listeners;
-91
+
+  return listeners;
+
   }
-92
-93
+
+
   public FileWatcher setListeners(List<FileListener> listeners) {
-94
+
     this.listeners = listeners;
-95
+
     return this;
-96
+
   }
-97
-98
+
+
   public static List<WatchService> getWatchServices() {
-99
+
     return Collections.unmodifiableList(watchServices);
-100
+
   }
-101
-102
+
+
 }
