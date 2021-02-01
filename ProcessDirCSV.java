@@ -23,7 +23,7 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
          String filename = contents[i];
          if (filename.endsWith(".csv")) {
             //System.out.println("FILE = "+ filename);
-            Scanner sc = new Scanner(new File("/workspace/java/csv/" + filename));    
+            Scanner sc = new Scanner(new File("./csv/" + filename));    
             sc.useDelimiter(",");   //sets the delimiter pattern 
             int firstOccurence=0;
             String scat=filename;
