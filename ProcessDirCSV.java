@@ -5,7 +5,8 @@ import java.util.Scanner;
 import java.util.Vector;
 public class ProcessDirCSV {    public static void main(String args[]) throws IOException {
       //Creating a File object for directory
-      File directoryPath = new File("/workspace/java/csv");
+      //File directoryPath = new File("/workspace/java/csv");
+      File directoryPath = new File("./csv");
       //List of all files and directories
       String contents[] = directoryPath.list();
       //System.out.println("List =:" + contents.length);
@@ -37,6 +38,10 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
                       if (s.startsWith("People -") || s.startsWith("Process -" ) || s.startsWith("Tech -" ) ){
                           firstOccurence++;
                          if (firstOccurence <= 21) { 
+                             int idx=s.indexOf("Your");
+                             if (idx>0) {
+                                 s = s.substring(0, idx);
+                             }
                              scat = scat +"," + s+"("+firstOccurence+") ";
                              category.add(catCntr, s); 
                              catCntr++;                                                        
@@ -46,6 +51,10 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
                        if (firstOccurence >= 21 && firstOccurence < 45){
                            firstOccurence++;
                            if (firstOccurence > 23 && firstOccurence< 45){
+                               int idx = s.indexOf("Comparative");
+                               if (idx>0) {
+                                 s = s.substring(0, idx);
+                               }
                                scat = scat +"," + s+"("+firstOccurence+") ";
                                score.add(scoreCntr, s);
                                scoreCntr++;                               
@@ -58,18 +67,26 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
                    String printSystem = "";
                     while (isystem.hasNext()) { 
                         printSystem=isystem.next().toString();
-                        System.out.print(printSystem);
-                        System.out.print(","); 
+                        int idx = printSystem.indexOf(".csv");
+                        printSystem = printSystem.substring(0, idx);
+                       // System.out.print(printSystem);
+                       // System.out.print(","); 
                     } 
-                    Iterator icategory = category.iterator();  
+                    Iterator icategory = category.iterator();
+                    Iterator iscore = score.iterator();   
                    // System.out.println("The iterator values are: "); 
                     while (icategory.hasNext()) { 
+                        System.out.print(printSystem + ",");
                         System.out.print(icategory.next());
-                        System.out.print(","); 
+                        if (iscore.hasNext()) { 
+                            System.out.print(",");
+                            System.out.println(iscore.next());
+                        }
+                        //System.out.print(","); 
                     } 
-                    System.out.println("");
-                    System.out.print(printSystem + ",");
-                    Iterator iscore = score.iterator();  
+                   // System.out.println("");
+                   // System.out.print(printSystem + ",");
+                   /* Iterator iscore = score.iterator();  
                     //System.out.println("The iterator values are: "); 
                     while (iscore.hasNext()) { 
                         String s = iscore.next().toString();
@@ -79,8 +96,8 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
                             System.out.print(s);
                         }
                         System.out.print(",");                      
-                    } 
-                    System.out.println("");
+                    } */
+                    //System.out.println("");
                     system.clear();
                     category.clear();
                     score.clear();
