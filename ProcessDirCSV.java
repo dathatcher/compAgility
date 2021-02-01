@@ -5,10 +5,10 @@ import java.util.Scanner;
 import java.util.Vector;
 public class ProcessDirCSV {    public static void main(String args[]) throws IOException {
       //Creating a File object for directory
-      File directoryPath = new File("/workspace/java/fax");
+      File directoryPath = new File("/workspace/java/csv");
       //List of all files and directories
       String contents[] = directoryPath.list();
-      //System.out.println("List of files and directories in the specified directory:");
+      //System.out.println("List =:" + contents.length);
 
       Vector system = new Vector();
       Vector category = new Vector();
@@ -22,7 +22,7 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
          String filename = contents[i];
          if (filename.endsWith(".csv")) {
             //System.out.println("FILE = "+ filename);
-            Scanner sc = new Scanner(new File("/workspace/java/fax/" + filename));    
+            Scanner sc = new Scanner(new File("/workspace/java/csv/" + filename));    
             sc.useDelimiter(",");   //sets the delimiter pattern 
             int firstOccurence=0;
             String scat=filename;
@@ -52,24 +52,35 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
                            }
                        }
                         }
-                    System.out.println("system: " + system.size());
-                    System.out.println("category: " + category.size());
-                    System.out.println("score: " + score.size()); 
+                    
                     Iterator isystem = system.iterator();  
-                    System.out.println("The iterator values are: "); 
+                   // System.out.println("The iterator values are: "); 
+                   String printSystem = "";
                     while (isystem.hasNext()) { 
-                        System.out.println(isystem.next()); 
+                        printSystem=isystem.next().toString();
+                        System.out.print(printSystem);
+                        System.out.print(","); 
                     } 
                     Iterator icategory = category.iterator();  
-                    System.out.println("The iterator values are: "); 
+                   // System.out.println("The iterator values are: "); 
                     while (icategory.hasNext()) { 
-                        System.out.println(icategory.next()); 
+                        System.out.print(icategory.next());
+                        System.out.print(","); 
                     } 
+                    System.out.println("");
+                    System.out.print(printSystem + ",");
                     Iterator iscore = score.iterator();  
-                    System.out.println("The iterator values are: "); 
+                    //System.out.println("The iterator values are: "); 
                     while (iscore.hasNext()) { 
-                        System.out.println(iscore.next()); 
+                        String s = iscore.next().toString();
+                        if(s.startsWith("Your Data")){
+                            System.out.print(",");
+                        }else{
+                            System.out.print(s);
+                        }
+                        System.out.print(",");                      
                     } 
+                    System.out.println("");
                     system.clear();
                     category.clear();
                     score.clear();

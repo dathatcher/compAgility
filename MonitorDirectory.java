@@ -15,11 +15,11 @@ public class MonitorDirectory {
 	public static void main(String[] args) throws IOException,
 			InterruptedException {
 
-		Path faxFolder = Paths.get("/workspace/java/fax");
+		Path csvFolder = Paths.get("/workspace/java/csv");
 		WatchService watchService = FileSystems.getDefault().newWatchService();
-		faxFolder.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
+		csvFolder.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
         try {
-            File myObj = new File("/workspace/java/fax/filename.txt");
+            File myObj = new File("/workspace/java/csv/filename.txt");
             if (myObj.createNewFile()) {
                  System.out.println("File created: " + myObj.getName());
             } else {
@@ -32,7 +32,7 @@ public class MonitorDirectory {
          }
 
         boolean valid = true;
-        FileWriter myWriter = new FileWriter("/workspace/java/fax/filename.txt");
+        FileWriter myWriter = new FileWriter("/workspace/java/csv/filename.txt");
         
 		do {
 			WatchKey watchKey = watchService.take();
@@ -43,7 +43,7 @@ public class MonitorDirectory {
                     
                     String fileName = event.context().toString();
                     System.out.println("File Created:" + fileName);
-                    Scanner sc = new Scanner(new File("/workspace/java/fax/" + fileName));    
+                    Scanner sc = new Scanner(new File("/workspace/java/csv/" + fileName));    
                     sc.useDelimiter(",");   //sets the delimiter pattern 
                     
                     while (sc.hasNext())  //returns a boolean value  
