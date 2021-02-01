@@ -1,5 +1,3 @@
 tasks:
 -  command: javac ProcessDirCSV.java
--  command: ls
--  command: ls
--  command: java ProcessDirCSV > wiley.csv
+-  command: chmod 777 run.sh
