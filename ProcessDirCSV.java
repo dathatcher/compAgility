@@ -42,8 +42,8 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
                              if (idx>0) {
                                  s = s.substring(0, idx);
                              }
-                             scat = scat +"," + s+"("+firstOccurence+") ";
-                             category.add(catCntr, s); 
+                             //scat = scat +"," + s+"("+firstOccurence+") ";
+                             category.add(catCntr, s.trim()); 
                              catCntr++;                                                        
                             // System.out.println("FILENAME: " + s);  //find and returns the next complete token from this scanner  
                           }
@@ -55,8 +55,8 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
                                if (idx>0) {
                                  s = s.substring(0, idx);
                                }
-                               scat = scat +"," + s+"("+firstOccurence+") ";
-                               score.add(scoreCntr, s);
+                              // scat = scat +"," + s+"("+firstOccurence+") ";
+                               score.add(scoreCntr, s.trim());
                                scoreCntr++;                               
                            }
                        }
