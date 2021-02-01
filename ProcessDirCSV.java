@@ -17,6 +17,7 @@ public class ProcessDirCSV {    public static void main(String args[]) throws IO
       int catCntr = 0;
       int scoreCntr = 0;
       
+      System.out.println("System,Category,Maturity Score");
       for(int i=0; i<contents.length; i++) {
         
          String filename = contents[i];
