@@ -1,3 +1,3 @@
 tasks:
 -  command: javac *.java
--  command: java ProcessDirCSV.java > wiley.csv
+-  command: java ProcessDirCSV > wiley.csv
